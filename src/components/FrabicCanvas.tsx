@@ -25,6 +25,13 @@ type OverlayImageType = {
   width: number;
   height: number;
 };
+type LineType = {
+  tool: "draw" | "erase";
+  color: string;
+  size: number;
+  points: number[];
+};
+
 type Props = {
   onSaved?: () => void;
 };
