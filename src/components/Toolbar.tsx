@@ -19,6 +19,7 @@ type ToolbarProps = {
   onOverlayImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDeleteSelected: () => void;
   selectedId: string | null;
+  onSaveToApp: () => void;
 
 };
 
@@ -33,7 +34,8 @@ const Toolbar = ({
   onDownloadImage,
   onOverlayImageChange,
   onDeleteSelected,
-  selectedId
+  selectedId,
+  onSaveToApp
 }: ToolbarProps) => {
   return (
     <div className="flex flex-col gap-4 mb-4 items-start w-full">
@@ -91,13 +93,21 @@ const Toolbar = ({
         Descargar imagen
       </Button>
       {selectedId && (
-  <Button
-    onClick={onDeleteSelected}
-    className="w-full rounded text-white bg-red-500"
-  >
-    Eliminar imagen seleccionada
-  </Button>
-)}
+        <Button
+          onClick={onDeleteSelected}
+          className="w-full rounded text-white bg-red-500"
+        >
+          Eliminar imagen seleccionada
+        </Button>
+      )}
+
+      <Button
+        onClick={onSaveToApp}
+        className="w-full rounded text-white bg-blue-500"
+      >
+        Guardar en la aplicación
+      </Button>
+
     </div>
   );
 };

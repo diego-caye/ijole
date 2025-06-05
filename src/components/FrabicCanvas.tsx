@@ -23,8 +23,10 @@ type OverlayImageType = {
   width: number;
   height: number;
 };
-
-const DrawingCanvas = () => {
+type Props = {
+  onSaved?: () => void;
+};
+const DrawingCanvas = ({ onSaved }: Props) => {
   const [imageUrl, setImageUrl] = useState("/miku.jpg");
   const [image] = useImage(imageUrl);
   const [lines, setLines] = useState<any[]>([]);
@@ -46,6 +48,7 @@ const DrawingCanvas = () => {
   const transformerRef = useRef<any>(null);
 
   const overlayRefs = useRef<Record<string, any>>({});
+
 
   useEffect(() => {
     const updateScale = () => {
@@ -114,6 +117,7 @@ const DrawingCanvas = () => {
 
   const handleMouseDown = (e: any) => {
     const transformerNode = transformerRef.current;
+
     const clickedOnEmpty =
       e.target === e.target.getStage() ||
       (!e.target.hasName("selectable") && !transformerNode?.children?.includes(e.target));
@@ -122,7 +126,12 @@ const DrawingCanvas = () => {
       setSelectedId(null);
     }
 
-    if (mode !== "draw") return;
+    if (mode !== "draw" && mode !== "erase") return;
+
+    if (!clickedOnEmpty) {
+      isDrawing.current = false;
+      return;
+    }
 
     isDrawing.current = true;
     const pos = getRelativePointerPosition(e.target.getStage());
@@ -168,6 +177,30 @@ const DrawingCanvas = () => {
     document.body.removeChild(link);
   };
 
+  const exportCompressed = () => {
+    if (!stageRef.current) return null;
+    return stageRef.current.toDataURL({
+      mimeType: "image/webp",
+      quality: 0.9,// Puedes ajustar entre 0.3–0.7
+      pixelRatio: 2,
+    });
+  };
+
+  const handleSaveToApp = () => {
+  const dataUrl = exportCompressed();
+  if (!dataUrl) return;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem("savedImages") || "[]");
+    const newSaved = [...saved, dataUrl];
+    localStorage.setItem("savedImages", JSON.stringify(newSaved));
+    onSaved?.(); // 👈 actualiza galería
+  } catch (e) {
+    alert("No se pudo guardar. Se alcanzó el límite del navegador.");
+  }
+};
+
+
   const updateOverlayImage = (id: string, newAttrs: Partial<OverlayImageType>) => {
     setOverlayImages((prev) =>
       prev.map((img) => (img.id === id ? { ...img, ...newAttrs } : img))
@@ -183,7 +216,7 @@ const DrawingCanvas = () => {
   if (!image) return <div>Loading...</div>;
 
   return (
-    <div className="md:grid space-y-6 grid-cols-2 md:space-x-12 p-12 md:p-0">
+    <div className="md:grid space-y-6 grid-cols-2 md:space-x-12">
       <div ref={containerRef}>
         <div
           style={{
@@ -205,22 +238,7 @@ const DrawingCanvas = () => {
               <KonvaImage image={image} />
             </Layer>
 
-            <Layer>
-              {lines.map((line, i) => (
-                <Line
-                  key={i}
-                  points={line.points}
-                  stroke={line.tool === "erase" ? "white" : line.color}
-                  strokeWidth={line.size}
-                  tension={0.5}
-                  lineCap="round"
-                  globalCompositeOperation={
-                    line.tool === "erase" ? "destination-out" : "source-over"
-                  }
-                />
-              ))}
-            </Layer>
-
+            {/* Imágenes overlay primero */}
             <Layer ref={layerRef}>
               {overlayImages.map((img) =>
                 img.img ? (
@@ -278,6 +296,25 @@ const DrawingCanvas = () => {
                 ) : null
               )}
             </Layer>
+
+            {/* Líneas encima */}
+            <Layer>
+              {lines.map((line, i) => (
+                <Line
+                  key={i}
+                  points={line.points}
+                  stroke={line.tool === "erase" ? "white" : line.color}
+                  strokeWidth={line.size}
+                  tension={0.5}
+                  lineCap="round"
+                  globalCompositeOperation={
+                    line.tool === "erase" ? "destination-out" : "source-over"
+                  }
+                />
+              ))}
+            </Layer>
+
+            {/* Transformer siempre visible */}
             <Layer>
               <Transformer
                 ref={transformerRef}
@@ -320,6 +357,7 @@ const DrawingCanvas = () => {
         onOverlayImageChange={handleOverlayImageChange}
         onDeleteSelected={handleDeleteSelected}
         selectedId={selectedId}
+        onSaveToApp={handleSaveToApp}
       />
     </div>
   );

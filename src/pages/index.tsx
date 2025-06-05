@@ -2,6 +2,9 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import FabricCanvas from "@/components/FrabicCanvas";
 import { ModeToggle } from "@/components/ModeToggle";
+import SavedImages from "@/components/SavedImages";
+import { useState } from "react";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,13 +17,18 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  const [refreshCounter, setRefreshCounter] = useState(0);
+
   return (
     <div
       className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pt-8 md:p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]`}
     >        <ModeToggle/>
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-            <FabricCanvas/>
+      <main className="gap-[32px] row-start-2 items-center sm:items-start px-12 md:px-0">
+            <FabricCanvas onSaved={() => setRefreshCounter((c) => c + 1)} />
+
+            <SavedImages refreshTrigger={refreshCounter} />
+
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
