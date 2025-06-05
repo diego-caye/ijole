@@ -10,6 +10,8 @@ import {
 } from "react-konva";
 import useImage from "use-image";
 import Toolbar from "./Toolbar";
+import type { KonvaEventObject } from "konva/lib/Node";
+import type Konva from "konva";
 
 type OverlayImageType = {
   id: string;
@@ -29,25 +31,30 @@ type Props = {
 const DrawingCanvas = ({ onSaved }: Props) => {
   const [imageUrl, setImageUrl] = useState("/miku.jpg");
   const [image] = useImage(imageUrl);
-  const [lines, setLines] = useState<any[]>([]);
+  const [lines, setLines] = useState<LineType[]>([]);
+
   const isDrawing = useRef(false);
 
   const [mode, setMode] = useState<"draw" | "erase">("draw");
   const [color, setColor] = useState("#000000");
   const [size, setSize] = useState(5);
-  const stageRef = useRef<any>(null);
+  const stageRef = useRef<Konva.Stage | null>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const linesRef = useRef<any[]>([]);
+  const linesRef = useRef<LineType[]>([]);
+
 
   const [scale, setScale] = useState(1);
 
   const [overlayImages, setOverlayImages] = useState<OverlayImageType[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const layerRef = useRef<any>(null);
-  const transformerRef = useRef<any>(null);
+  const layerRef = useRef<Konva.Layer | null>(null);
 
-  const overlayRefs = useRef<Record<string, any>>({});
+  const transformerRef = useRef<Konva.Transformer | null>(null);
+
+  const overlayRefs = useRef<Record<string, Konva.Image>>({});
+
 
 
   useEffect(() => {
@@ -108,14 +115,16 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     reader.readAsDataURL(file);
   };
 
-  const getRelativePointerPosition = (stage: any) => {
+  const getRelativePointerPosition = (stage: Konva.Stage) => {
+
     const transform = stage.getAbsoluteTransform().copy();
     transform.invert();
     const pos = stage.getPointerPosition();
     return transform.point(pos);
   };
 
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+
     const transformerNode = transformerRef.current;
 
     const clickedOnEmpty =
@@ -195,7 +204,7 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     const newSaved = [...saved, dataUrl];
     localStorage.setItem("savedImages", JSON.stringify(newSaved));
     onSaved?.(); // 👈 actualiza galería
-  } catch (e) {
+  } catch {
     alert("No se pudo guardar. Se alcanzó el límite del navegador.");
   }
 };
