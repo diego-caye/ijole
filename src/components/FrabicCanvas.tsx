@@ -149,7 +149,7 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     setLines([...linesRef.current]);
   };
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: KonvaEventObject<PointerEvent>) => {
     if (!isDrawing.current) return;
     const point = getRelativePointerPosition(e.target.getStage());
     const currentLine = linesRef.current[linesRef.current.length - 1];
