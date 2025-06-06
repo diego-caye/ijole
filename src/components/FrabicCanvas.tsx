@@ -88,7 +88,7 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     const selectedNode = overlayRefs.current[selectedId];
     if (selectedNode && transformerRef.current) {
       transformerRef.current.nodes([selectedNode]);
-      transformerRef.current.getLayer().batchDraw();
+      transformerRef.current.getLayer()?.batchDraw();
     }
   }, [selectedId, overlayImages]);
 
@@ -127,10 +127,13 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     const transform = stage.getAbsoluteTransform().copy();
     transform.invert();
     const pos = stage.getPointerPosition();
+    if (!pos) return {x:0, y:0}
     return transform.point(pos);
   };
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    const stage = e.target.getStage();
+    if (!stage) return;
 
     const transformerNode = transformerRef.current;
 
@@ -150,7 +153,8 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     }
 
     isDrawing.current = true;
-    const pos = getRelativePointerPosition(e.target.getStage());
+    const pos = getRelativePointerPosition(stage);
+    if (!pos) return;
     const newLine = { tool: mode, color, size, points: [pos.x, pos.y] };
     linesRef.current.push(newLine);
     setLines([...linesRef.current]);
@@ -158,7 +162,10 @@ const DrawingCanvas = ({ onSaved }: Props) => {
 
   const handleMouseMove = (e: KonvaEventObject<PointerEvent>) => {
     if (!isDrawing.current) return;
-    const point = getRelativePointerPosition(e.target.getStage());
+    const stage = e.target.getStage();
+    if (!stage) return;
+    const point = getRelativePointerPosition(stage);
+    if (!point) return;
     const currentLine = linesRef.current[linesRef.current.length - 1];
     currentLine.points = currentLine.points.concat([point.x, point.y]);
     setLines([...linesRef.current]);
@@ -184,7 +191,8 @@ const DrawingCanvas = ({ onSaved }: Props) => {
   };
 
   const handleExport = () => {
-    const uri = stageRef.current.toDataURL();
+    const uri = stageRef.current?.toDataURL();
+    if (!uri) return; 
     const link = document.createElement("a");
     link.download = "drawing.jpg";
     link.href = uri;
