@@ -205,7 +205,7 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     if (!stageRef.current) return null;
     return stageRef.current.toDataURL({
       mimeType: "image/webp",
-      quality: 0.9,// Puedes ajustar entre 0.3–0.7
+      quality: 0.9,
       pixelRatio: 2,
     });
   };
@@ -218,7 +218,7 @@ const DrawingCanvas = ({ onSaved }: Props) => {
     const saved = JSON.parse(localStorage.getItem("savedImages") || "[]");
     const newSaved = [...saved, dataUrl];
     localStorage.setItem("savedImages", JSON.stringify(newSaved));
-    onSaved?.(); // 👈 actualiza galería
+    onSaved?.();
   } catch {
     alert("No se pudo guardar. Se alcanzó el límite del navegador.");
   }
@@ -262,7 +262,6 @@ const DrawingCanvas = ({ onSaved }: Props) => {
               <KonvaImage image={image} />
             </Layer>
 
-            {/* Imágenes overlay primero */}
             <Layer ref={layerRef}>
               {overlayImages.map((img) =>
                 img.img ? (
@@ -321,7 +320,6 @@ const DrawingCanvas = ({ onSaved }: Props) => {
               )}
             </Layer>
 
-            {/* Líneas encima */}
             <Layer>
               {lines.map((line, i) => (
                 <Line
@@ -338,7 +336,6 @@ const DrawingCanvas = ({ onSaved }: Props) => {
               ))}
             </Layer>
 
-            {/* Transformer siempre visible */}
             <Layer>
               <Transformer
                 ref={transformerRef}
