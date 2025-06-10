@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+
 type Props = {
   refreshTrigger: number;
 };
 
 const SavedImages = ({ refreshTrigger }: Props) => {
+  const t = useTranslations();
+
   const [savedImages, setSavedImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,7 +33,7 @@ const SavedImages = ({ refreshTrigger }: Props) => {
   return (
     <PhotoProvider>
     <div>
-      <h2 className="text-xl font-bold mb-4">Tus dibujos guardados</h2>
+      <h2 className="text-xl font-bold mb-4">{t("your saved drawings")}</h2>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {savedImages.map((src, idx) => (
           <div key={idx} className="relative aspect-video bg-gray-100 rounded overflow-hidden">

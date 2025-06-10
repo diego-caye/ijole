@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     config.externals = [...config.externals, { canvas: 'canvas' }];
     return config;
   },
+  i18n: {
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    localeDetection: false, 
+  },
 
   reactStrictMode: true,
 };

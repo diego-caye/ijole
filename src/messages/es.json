@@ -1,0 +1,13 @@
+{
+    "tools" : "Herramienta",
+    "draw" : "Dibujar",
+    "delete" : "Borrar",
+    "color" : "Color",
+    "brush size" : "Tamaño del pincel",
+    "replace background image" : "Reemplazar imagen de fondo",
+    "add movable image" : "Agregar imagen movible",
+    "delete selected image" : "Eliminar imagen seleccionada",
+    "save to the app" : "Guardar en la aplicación",
+    "download image" : "Descargar imagen",
+    "your saved drawings" : "Tus dibujos guardados"
+}

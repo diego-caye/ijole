@@ -4,7 +4,8 @@ import FabricCanvas from "@/components/FrabicCanvas";
 import { ModeToggle } from "@/components/ModeToggle";
 import SavedImages from "@/components/SavedImages";
 import { useState } from "react";
-
+import { GetStaticPropsContext } from "next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,17 +18,22 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+
   const [refreshCounter, setRefreshCounter] = useState(0);
 
   return (
     <div
       className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pt-8 md:p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]`}
-    >        <ModeToggle/>
-
+    >
+     
       <main className="gap-[32px] row-start-2 items-center sm:items-start px-12 md:px-0">
-            <FabricCanvas onSaved={() => setRefreshCounter((c) => c + 1)} />
+        <div className="p-9 flex justify-center gap-8">
+        <LanguageSwitcher />
+        <ModeToggle />
+        </div>
+        <FabricCanvas onSaved={() => setRefreshCounter((c) => c + 1)} />
 
-            <SavedImages refreshTrigger={refreshCounter} />
+        <SavedImages refreshTrigger={refreshCounter} />
 
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
@@ -79,4 +85,11 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../messages/${locale}.json`)).default
+    }
+  };
 }

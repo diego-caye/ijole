@@ -36,7 +36,7 @@ type Props = {
   onSaved?: () => void;
 };
 const DrawingCanvas = ({ onSaved }: Props) => {
-  const [imageUrl, setImageUrl] = useState("/miku.jpg");
+  const [imageUrl, setImageUrl] = useState("/ijole_base.png");
   const [image] = useImage(imageUrl);
   const [lines, setLines] = useState<LineType[]>([]);
 
