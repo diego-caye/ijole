@@ -20,6 +20,7 @@ export default function ColorPicker({ color, onChange }: ColorPickerProps) {
           variant="outline"
           className="w-10 h-10 p-0"
           style={{ backgroundColor: color }}
+          aria-label="Color-Pen"
         />
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

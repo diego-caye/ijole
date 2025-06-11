@@ -76,6 +76,7 @@ const Toolbar = ({
           max={100}
           step={1}
           onValueChange={([val]) => setSize(val)}
+          aria-label='Size Slider Volume'
         />
       </div>
 
@@ -90,14 +91,14 @@ const Toolbar = ({
       </div>
       <Button
         onClick={onDownloadImage}
-        className="w-full rounded text-white bg-green-400"
+        className="w-full rounded text-white bg-green-700"
       >
         {t('download image')}Descargar imagen
       </Button>
       {selectedId && (
         <Button
           onClick={onDeleteSelected}
-          className="w-full rounded text-white bg-red-500"
+          className="w-full rounded text-white bg-red-800"
         >
           {t('delete selected image')}
         </Button>
@@ -105,7 +106,7 @@ const Toolbar = ({
 
       <Button
         onClick={onSaveToApp}
-        className="w-full rounded text-white bg-blue-500"
+        className="w-full rounded text-white bg-blue-800"
       >
         {t('save to the app')}
       </Button>
