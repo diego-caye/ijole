@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => handleChange("es")}>
-          Espanish
+          Español
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleChange("en")}>
           English
