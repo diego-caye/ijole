@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Hatsune Ijole | Ijole Generator | Edit Any Image</title>
+        <title>Hatsune Ijole | Ijole Meme Generator | Edit Any Image</title>
         <meta name="description" content="Image generator made for quick editing of various images or funny things like Hatsune Ijole, Teto / Kasane ijole and Akita ijole" />
       </Head>
       <div
