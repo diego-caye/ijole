@@ -23,8 +23,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Ijole Generator / Edit Any Image</title>
-        <meta name="description" content="Image generator made for quick editing of various images or funny things." />
+        <title>Hatsune Ijole | Ijole Generator | Edit Any Image</title>
+        <meta name="description" content="Image generator made for quick editing of various images or funny things like Hatsune Ijole, Teto / Kasane ijole and Akita ijole" />
       </Head>
       <div
         className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pt-8 md:p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]`}
